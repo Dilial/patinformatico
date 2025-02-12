@@ -33,24 +33,6 @@ for (const folder of commandFolders) {
 	}
 }
 
-//prefix handler
-let CommandsDir = path.join(__dirname, ".", "commands");
-    fs.readdir(CommandsDir, (err, files) => {
-      if (err) this.log(err);
-      else
-        files.forEach((file) => {
-          let cmd = require(CommandsDir + "/" + file);
-          if (!cmd.name || !cmd.description || !cmd.run)
-            return this.log(
-              "Unable to load Command: " +
-                file.split(".")[0] +
-                ", Reason: File doesn't had run/name/desciption"
-            );
-          this.commands.set(file.split(".")[0].toLowerCase(), cmd);
-          this.log("Command Loaded: " + file.split(".")[0]);
-        });
-    });
-
 //events handler
 const eventsPath = path.join(__dirname, 'events');
 const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
