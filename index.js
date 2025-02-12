@@ -1,6 +1,6 @@
 const fs = require('node:fs');
 const path = require('node:path');
-const { Client, Collection, GatewayIntentBits } = require('discord.js');
+const { Client, Collection, Partials, GatewayIntentBits } = require('discord.js');
 const { token } = require('./config.js');
 const client = new Client({ intents: [
 	GatewayIntentBits.Guilds,
@@ -8,7 +8,9 @@ const client = new Client({ intents: [
 	GatewayIntentBits.GuildMessages,
 	GatewayIntentBits.GuildVoiceStates,
 	GatewayIntentBits.GuildMessageReactions,
-] });
+], partials: [
+	Partials.Message, Partials.Channel, Partials.Reaction
+]});
 
 
 
