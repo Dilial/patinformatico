@@ -18,6 +18,7 @@ const client = new Client({
 
 client.commands = new Collection();
 client.slashCommands = new Collection();
+client.prefix = prefix;
 
 const loadCommands = (dir, collection) => {
   const commandFiles = fs.readdirSync(`./commands/${dir}`).filter(file => file.endsWith('.js'));
