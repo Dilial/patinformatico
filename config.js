@@ -6,5 +6,5 @@ module.exports = {
     guildId: process.env.GUILD_ID,
     channelId: process.env.verificationChannel,
     roleId: process.env.verificationRole,
-    prefijo: process.env.prefijo,
+    predix: process.env.prefix,
 }
