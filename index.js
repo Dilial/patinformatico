@@ -1,14 +1,13 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { Client, Collection, GatewayIntentBits } = require('discord.js');
-const { token, mongoURI } = require('./config.json');
+const { token } = require('./config.js');
 const client = new Client({ intents: [
 	GatewayIntentBits.Guilds,
 	GatewayIntentBits.GuildMembers,
 	GatewayIntentBits.GuildMessages,
 	GatewayIntentBits.GuildVoiceStates,
 	GatewayIntentBits.GuildMessageReactions,
-	GatewayIntentBits.GuildEmojisAndStickers,
 ] });
 
 
