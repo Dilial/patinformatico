@@ -10,7 +10,7 @@ module.exports = {
 			name: 'cuack'
 		})
 		console.log(`Ready! Logged in as ${client.user.tag}`);
-		client.application.commands.set(Array.from(client.slashCommands.values()));
+		//client.application.commands.set(Array.from(client.slashCommands.values()));
 
 
 		const channel = await client.channels.fetch(channelId);

@@ -2,15 +2,18 @@ const fs = require('fs');
 const path = require('path');
 const { Client, Collection, Partials, GatewayIntentBits } = require('discord.js');
 const { token, prefix } = require('./config.js');
-const client = new Client({ intents: [
-	GatewayIntentBits.Guilds,
-	GatewayIntentBits.GuildMembers,
-	GatewayIntentBits.GuildMessages,
-	GatewayIntentBits.GuildVoiceStates,
-	GatewayIntentBits.GuildMessageReactions,
-], partials: [
-	Partials.Message, Partials.Channel, Partials.Reaction
-]});
+const client = new Client({
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMembers,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.GuildVoiceStates,
+    GatewayIntentBits.GuildMessageReactions,
+  ],
+  partials: [
+    Partials.Message, Partials.Channel, Partials.Reaction
+  ]
+});
 
 client.commands = new Collection();
 client.slashCommands = new Collection();
@@ -35,19 +38,18 @@ loadCommands('slash', client.slashCommands);
   client.application.commands.set(Array.from(client.slashCommands.values()));
 });*/
 
-
 //events handler
 const eventsPath = path.join(__dirname, 'events');
 const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
 
 for (const file of eventFiles) {
-	const filePath = path.join(eventsPath, file);
-	const event = require(filePath);
-	if (event.once) {
-		client.once(event.name, (...args) => event.execute(...args));
-	} else {
-		client.on(event.name, (...args) => event.execute(client, ...args));
-	}
+  const filePath = path.join(eventsPath, file);
+  const event = require(filePath);
+  if (event.once) {
+    client.once(event.name, (...args) => event.execute(...args));
+  } else {
+    client.on(event.name, (...args) => event.execute(client, ...args));
+  }
 }
 
 client.login(token);
