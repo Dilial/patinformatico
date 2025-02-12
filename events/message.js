@@ -12,7 +12,7 @@ module.exports = {
         const args = message.content.slice(prefix.length).trim().split(/ +/);
         const commandName = args.shift().toLowerCase();
         console.log('2');
-        const command = client.commands.get(commandName.replace("c!", ''))
+        const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
         console.log(commandName);
         console.log('3');
         if (!command) return;
