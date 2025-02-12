@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const { Client, Collection, Partials, GatewayIntentBits } = require('discord.js');
 const { token, prefix } = require('./config.js');
+
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
@@ -33,12 +34,12 @@ loadCommands('prefix', client.commands);
 // Load slash commands
 loadCommands('slash', client.slashCommands);
 
-/*client.once('ready', () => {
-  console.log(`Logged in as ${client.user.tag}!`);
-  client.application.commands.set(Array.from(client.slashCommands.values()));
-});*/
+client.once('ready', () => {
+  console.log(`Ready! Logged in as ${client.user.tag}`);
+  client.application.commands.set(Array.from(client.slashCommands.values()).map(cmd => cmd.data));
+});
 
-//events handler
+// Event handler
 const eventsPath = path.join(__dirname, 'events');
 const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
 
@@ -46,7 +47,7 @@ for (const file of eventFiles) {
   const filePath = path.join(eventsPath, file);
   const event = require(filePath);
   if (event.once) {
-    client.once(event.name, (...args) => event.execute(...args));
+    client.once(event.name, (...args) => event.execute(client, ...args));
   } else {
     client.on(event.name, (...args) => event.execute(client, ...args));
   }
