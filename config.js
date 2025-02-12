@@ -4,7 +4,7 @@ module.exports = {
     token: process.env.TOKEN,
     clientId: process.env.CLIENT_ID,
     guildId: process.env.GUILD_ID,
-    verificationChannel: process.env.CHANNEL_ID,
-    verificationRole: process.env.ROLE_ID,
-    verificationMessage: String,
+    channelId: process.env.verificationChannel,
+    roleId: process.env.verificationRole,
+    prefijo: process.env.prefijo,
 }

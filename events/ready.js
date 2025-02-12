@@ -1,10 +1,10 @@
 const { Events, ActivityType, EmbedBuilder } = require('discord.js');
-let { verificationMessage } = require('../config');
+let { channelId } = require('../config');
 
 module.exports = {
 	name: Events.ClientReady,
 	once: true,
-	execute(client) {
+	async execute(client) {
 		client.user.setActivity({
 			type: ActivityType.Playing,
 			name: 'cuack'
@@ -12,20 +12,26 @@ module.exports = {
 		console.log(`Ready! Logged in as ${client.user.tag}`);
 
 
-		const channel = client.channels.cache.get("1339289605475799173");
-        if (!channel) return console.error('Canal no encontrado.');
+		const channel = await client.channels.fetch(channelId);
+    	if (!channel) console.error('Canal no encontrado.');
 
-        const embed = new EmbedBuilder()
-            .setColor('#0099ff')
-            .setTitle('Verificación')
-            .setDescription('Reacciona con ✅ para verificarte y acceder al servidor.');
+    	const messages = await channel.messages.fetch({ limit: 10 });
+    	const existingMessage = messages.find(m => 
+        	m.author.id === client.user.id && 
+        	m.embeds.length > 0 && 
+        	m.embeds[0].title === 'Verificación'
+    	);
 
-        channel.send({ embeds: [embed] }).then(message => {
+    	if (existingMessage) return console.log('El mensaje de verificación ya fue enviado.');
+
+    	const embed = new EmbedBuilder()
+        	.setColor('#0099ff')
+        	.setTitle('Verificación')
+        	.setDescription('Reacciona con ✅ para verificarte y acceder al servidor.');
+
+		channel.send({ embeds: [embed] }).then(message => {
 			message.react('✅');
-			verificationMessage = message.id;
 		});
-
-		
         
 	},
 };
