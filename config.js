@@ -7,4 +7,8 @@ module.exports = {
     channelId: process.env.verificationChannel,
     roleId: process.env.verificationRole,
     prefix: process.env.prefix,
+    lavalinkHost: process.env.LAVALINK_HOST,
+    lavalinkPort: process.env.LAVALINK_PORT,
+    lavalinkPassword: process.env.LAVALINK_PASSWORD,
+    lavalinkSecure: process.env.LAVALINK_SECURE,
 }

@@ -1,0 +1,15 @@
+{
+    "name": "discord-music-bot",
+    "version": "1.0.0",
+    "description": "Bot de música para Discord con Lavalink",
+    "main": "src/index.js",
+    "scripts": {
+        "start": "node src/index.js"
+    },
+    "dependencies": {
+        "@discordjs/voice": "^0.18.0",
+        "discord.js": "^14.18.0",
+        "dotenv": "^16.4.7",
+        "erela.js": "^2.3.0"
+    }
+}

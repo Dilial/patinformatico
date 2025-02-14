@@ -1,25 +1,27 @@
-const { Events } = require('discord.js');
-const { prefix } = require('../config.js');
+const { PermissionFlagsBits } = require('discord.js');
+const { prefix } = require('../config');
 
 module.exports = {
 	name: "messageCreate",
 	async execute(client, message) {
-        console.log('0');
-        //if (!message.content.startsWith(prefix) || message.author.bot) return;
-        if (message.author.bot) return;
-        console.log('1');
+        
+        if (!message.content.startsWith(prefix) || message.author.bot) return;
+        
     
-        const args = message.content.slice(prefix.length).trim().split(/ +/);
+        const args = message.content.slice(prefix.length).trim().split(/ +/g);
         const commandName = args.shift().toLowerCase();
-        console.log('2');
+        
         const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
-        console.log(commandName);
-        console.log('3');
+        
+        
         if (!command) return;
-        console.log('4');
+        
+        if (command.permissions) {
+          if (!message.member.permissions.has(command.permissions)) return message.reply(`No tienes permisos para ejecutar este comando!`);
+        }
+
         try {
-          await command.execute(message, args);
-          console.log('5');
+          await command.run(client, message, args, client.manager);
         } catch (error) {
           console.error(error);
           message.reply('Hubo un error al ejecutar ese comando!');
