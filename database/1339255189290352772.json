@@ -19,5 +19,15 @@
     "uri": "https://www.youtube.com/watch?v=9oDxynh7rG0",
     "author": "LyricsZone",
     "duration": 214000
+  },
+  "rulesChannel": "1340414520375644290",
+  "rulesMessageId": "1340734785441632289",
+  "verificationRequired": true,
+  "verificationEmoji": "✅",
+  "verificationRole": "1339259006266376304",
+  "embed": {
+    "title": "Reglas y normas del servidor",
+    "color": 5763719,
+    "footer": "Si estas en este servidor se entiende que aceptas y has leído las reglas"
   }
 }

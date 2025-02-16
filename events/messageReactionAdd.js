@@ -26,6 +26,7 @@ module.exports = {
             }
 
             Logger.info(MODULE_NAME, `Reaction added by ${user.tag} with emoji ${reaction.emoji.name}`, 'ReactionAdd');
+            await client.rules.handleVerification(reaction, user);
             await client.autoRole.handleReaction(reaction, user, true);
         } catch (error) {
             Logger.error(MODULE_NAME, 'Error handling reaction add:', error);

@@ -15,7 +15,7 @@ module.exports = {
 		client.user.setActivity('music | /help', { type: 'LISTENING' });
 		Logger.info(MODULE_NAME, 'Bot status updated', 'Status');
 
-		const channel = await client.channels.fetch(channelId);
+		/*const channel = await client.channels.fetch(channelId);
     	if (!channel) Logger.error(MODULE_NAME, 'Canal no encontrado.');
 
     	const messages = await channel.messages.fetch({ limit: 10 });
@@ -38,6 +38,6 @@ module.exports = {
 		channel.send({ embeds: [embed] }).then(message => {
 			message.react('✅');
 			Logger.success(MODULE_NAME, 'Verification message sent and reaction added');
-		});
+		});*/
 	},
 };

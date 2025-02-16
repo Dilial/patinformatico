@@ -6,6 +6,7 @@ const MusicManager = require('./utils/musicManager');
 const InstagramNotifier = require('./utils/instagramNotifier');
 const AutoRole = require('./utils/autoRole');
 const Logger = require('./utils/logger');
+const RulesManager = require('./utils/rulesManager');
 
 const client = new Client({
   intents: [
@@ -128,6 +129,9 @@ client.once('ready', async () => {
     } catch (error) {
         Logger.error('CommandDeploy', 'Failed to register slash commands', error);
     }
+
+    // Initialize rules manager
+    client.rules = new RulesManager(client);
 });
 
 // Event handler

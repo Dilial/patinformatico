@@ -22,6 +22,7 @@ module.exports = {
         ReactionHandler: true,
         RepetitiveTask: true,
         ShutdownHandler: true,
+        ReactionAdd: false,
 
         // Core Systems
         AutoRole: false,

@@ -84,7 +84,7 @@ class AutoRole {
             const roleData = this.reactionRoles.get(messageId);
 
             if (!roleData) {
-                Logger.debug(MODULE_NAME, `No role data found for message ${messageId}`, 'ReactionHandle');
+                Logger.info(MODULE_NAME, `No role data found for message ${messageId}`, 'ReactionHandle');
                 return;
             }
 
@@ -101,7 +101,7 @@ class AutoRole {
             });
 
             if (!roleInfo) {
-                Logger.debug(MODULE_NAME, `No role configured for emoji ${reaction.emoji.name}`, 'ReactionHandle');
+                Logger.info(MODULE_NAME, `No role configured for emoji ${reaction.emoji.name}`, 'ReactionHandle');
                 return;
             }
 
