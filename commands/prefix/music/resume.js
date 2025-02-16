@@ -1,10 +1,9 @@
 const Logger = require('../../../utils/logger');
-const MODULE_NAME = 'StopCommand';
+const MODULE_NAME = 'ResumeCommand';
 
 module.exports = {
-    name: 'stop',
-    aliases: ['leave', 'disconnect'],
-    description: 'Stops the music and leaves the voice channel',
+    name: 'resume',
+    description: 'Resume the current song',
     category: 'music',
     run: async (client, message, args) => {
         try {
@@ -16,23 +15,27 @@ module.exports = {
             }
 
             if (!message.member.voice.channel) {
-                Logger.warn(MODULE_NAME, `${message.author.tag} attempted to stop without being in a voice channel`, 'Validation');
+                Logger.warn(MODULE_NAME, `${message.author.tag} attempted to resume without being in a voice channel`, 'Validation');
                 return message.reply('❌ You need to be in a voice channel!');
             }
 
-            player.queue.clear();
-            player.stop();
-            Logger.success(MODULE_NAME, `Music stopped in guild ${message.guild.id}`, 'Playback');
+            if (!player.paused) {
+                Logger.warn(MODULE_NAME, 'Player is already playing', 'Validation');
+                return message.reply('⚠️ The music is already playing!');
+            }
+
+            player.pause(false);
+            Logger.success(MODULE_NAME, 'Playback resumed', 'Playback');
             
             const embed = {
-                description: '⏹️ Stopped the music and cleared the queue',
+                description: '▶️ Resumed the music',
                 color: 0x00FF00
             };
             
             return message.channel.send({ embeds: [embed] });
         } catch (error) {
-            Logger.error(MODULE_NAME, 'Error stopping playback:', error);
-            return message.reply('❌ An error occurred while trying to stop the music!');
+            Logger.error(MODULE_NAME, 'Error resuming playback:', error);
+            return message.reply('❌ An error occurred while trying to resume!');
         }
     }
 };
