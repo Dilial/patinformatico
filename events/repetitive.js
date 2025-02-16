@@ -6,7 +6,7 @@ module.exports = {
 	name: Events.ClientReady,
 	once: true,
 	execute(client) {
-		const time = 28 * 60 * 24 * 1000; // 28 days in milliseconds
+		const time = 2 * 60 * 24 * 1000; // 2 days in milliseconds
 
 		setInterval(() => {
 			client.guilds.cache.forEach(guild => {
