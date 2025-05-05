@@ -1,3 +1,4 @@
+const { PermissionsBitField } = require('discord.js');
 const Logger = require('../../../utils/logger');
 const MODULE_NAME = 'HelpCommand';
 
@@ -20,7 +21,9 @@ module.exports = {
                 // Check if user has permission to use the command
                 if (command.permissions) {
                     const authorPerms = message.channel.permissionsFor(message.author);
-                    if (!authorPerms || !command.permissions.every(perm => authorPerms.has(perm))) {
+                    if (!authorPerms || !command.permissions.every(perm => 
+                        PermissionsBitField.Flags[perm] && authorPerms.has(PermissionsBitField.Flags[perm])
+                    )) {
                         return; // Skip this command if user doesn't have permission
                     }
                 }
@@ -53,10 +56,10 @@ module.exports = {
                               parseInt(m.content) > 0 && 
                               parseInt(m.content) <= categories.size;
 
-            const collector = message.channel.createMessageCollector({
-                filter,
+            const collector = message.channel.createMessageCollector({ 
+                filter, 
                 time: 300000, // 5 minutes
-                max: 1
+                max: 1 
             });
 
             collector.on('collect', async m => {
@@ -66,20 +69,13 @@ module.exports = {
 
                 const categoryEmbed = {
                     title: `${categoryName.charAt(0).toUpperCase() + categoryName.slice(1)} Commands`,
-                    description: `Use \`${client.prefix}help [command]\` for more info about a command`,
-                    color: 0x00FF00,
-                    fields: commands.map(cmd => ({
-                        name: cmd.name,
-                        value: `${cmd.description || 'No description provided'}\n` +
-                               `Usage: \`${client.prefix}${cmd.name} ${cmd.usage || ''}\``,
-                        inline: false
-                    }))
+                    description: commands.map(cmd => 
+                        `**${client.prefix}${cmd.name}** ${cmd.usage ? `\`${cmd.usage}\`` : ''}\n${cmd.description || 'No description provided'}`
+                    ).join('\n\n'),
+                    color: 0x00FF00
                 };
 
-                Logger.success(MODULE_NAME, `Displayed commands for category: ${categoryName}`, 'Display');
                 await helpMsg.edit({ embeds: [categoryEmbed] });
-                
-                // Try to delete the user's response
                 try {
                     await m.delete();
                 } catch (error) {
@@ -87,16 +83,11 @@ module.exports = {
                 }
             });
 
-            collector.on('end', collected => {
-                if (collected.size === 0) {
-                    Logger.info(MODULE_NAME, 'Help menu expired without selection', 'Timeout');
+            collector.on('end', (collected, reason) => {
+                if (reason === 'time') {
                     helpMsg.edit({ 
-                        embeds: [{ 
-                            title: '❌ Help Menu Expired',
-                            description: 'Please run the help command again to view commands.',
-                            color: 0xFF0000
-                        }]
-                    });
+                        embeds: [{ ...embed, footer: { text: 'This help menu has expired' } }] 
+                    }).catch(() => {});
                 }
             });
 
@@ -119,7 +110,9 @@ async function showCommandHelp(client, message, commandName) {
     // Check if user has permission to use the command
     if (command.permissions) {
         const authorPerms = message.channel.permissionsFor(message.author);
-        if (!authorPerms || !command.permissions.every(perm => authorPerms.has(perm))) {
+        if (!authorPerms || !command.permissions.every(perm => 
+            PermissionsBitField.Flags[perm] && authorPerms.has(PermissionsBitField.Flags[perm])
+        )) {
             Logger.warn(MODULE_NAME, `User ${message.author.tag} tried to view help for command without permissions: ${command.name}`, 'Permissions');
             return message.reply('❌ You do not have permission to use this command!');
         }

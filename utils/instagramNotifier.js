@@ -11,8 +11,8 @@ class InstagramNotifier {
         this.databasePath = path.join(__dirname, '..', 'database', 'instagram_last_post.json');
         this.loadLastPostTime();
         
-        // Start checking for new posts every 5 minutes
-        setInterval(() => this.checkNewPosts(), 5 * 60 * 1000);
+        // Start checking for new posts every 10 minutes
+        setInterval(() => this.checkNewPosts(), 10 * 60 * 1000);
         Logger.info(MODULE_NAME, 'Started post checking interval', 'General');
     }
 
@@ -40,22 +40,22 @@ class InstagramNotifier {
                 return null;
             }
 
-            const posts = timeline.edges.map(edge => ({
+            return timeline.edges.map(edge => ({
                 id: edge.node.id,
                 shortcode: edge.node.shortcode,
                 timestamp: edge.node.taken_at_timestamp * 1000,
                 type: this.getPostType(edge.node.__typename),
                 caption: edge.node.edge_media_to_caption.edges[0]?.node.text || '',
-                url: `https://www.instagram.com/p/${edge.node.shortcode}`,
+                url: `https://www.instagram.com/${edge.node.shortcode}`,
                 thumbnail: edge.node.display_url
             }));
 
-            return posts;
         } catch (error) {
             if (error.response) {
-                Logger.error(MODULE_NAME, `Instagram API error (${error.response.status}):`, error.response.data);
+                Logger.error(MODULE_NAME, `Instagram API error (${error.response.status}):`, 
+                    error.response.data.message || JSON.stringify(error.response.data));
             } else {
-                Logger.error(MODULE_NAME, 'Error fetching Instagram posts:', error);
+                Logger.error(MODULE_NAME, 'Error fetching Instagram posts:', error.message);
             }
             return null;
         }
@@ -83,7 +83,7 @@ class InstagramNotifier {
                 }
             }
         } catch (error) {
-            Logger.error(MODULE_NAME, 'Error checking Instagram posts:', error);
+            Logger.error(MODULE_NAME, 'Error checking Instagram posts:', error.message);
         }
     }
 
@@ -97,12 +97,7 @@ class InstagramNotifier {
         const roleId = this.client.config.instagramRoleId;
         const roleMention = roleId ? `<@&${roleId}>` : '';
 
-        let messageContent = this.client.config.instagramMessageTemplate
-            .replace('{username}', this.client.config.instagramUsername)
-            .replace('{type}', post.type)
-            .replace('{link}', post.url)
-            .replace('{ping}', roleMention)
-            .replace(/\\n/g, '\n');
+        const messageContent = `New ${post.type} from ${this.client.config.instagramUsername}!\n${post.url}\n${roleMention}`;
 
         const embed = {
             color: 0xE1306C,

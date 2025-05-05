@@ -7,6 +7,7 @@ const InstagramNotifier = require('./utils/instagramNotifier');
 const AutoRole = require('./utils/autoRole');
 const Logger = require('./utils/logger');
 const RulesManager = require('./utils/rulesManager');
+const mongoose = require('mongoose');
 
 const client = new Client({
   intents: [
@@ -85,6 +86,10 @@ loadCommands();
 // Load slash commands
 loadSlashCommands();
 
+mongoose.connect(config.mongoURI)
+    .then(() => Logger.success('MongoDB', 'Connected to MongoDB', 'Initialization'))
+    .catch(err => Logger.error('MongoDB', 'Failed to connect to MongoDB', err));
+
 client.once('ready', async () => {
     // Initialize music manager
     client.music = new MusicManager(client);
@@ -109,7 +114,7 @@ client.once('ready', async () => {
     Logger.success('AutoRole', 'System initialized', 'Initialization');
 
     // Initialize Instagram notifier if username is provided
-    if (client.config.instagramUsername) {
+    /*if (client.config.instagramUsername) {
         try {
             client.instagram = new InstagramNotifier(client);
             Logger.success('Instagram', `Notifier initialized for @${client.config.instagramUsername}`, 'Initialization');
@@ -118,7 +123,7 @@ client.once('ready', async () => {
         }
     } else {
         Logger.warn('Instagram', 'Username not provided, skipping initialization', 'Initialization');
-    }
+    }*/
 
     // Register slash commands
     try {

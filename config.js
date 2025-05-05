@@ -7,13 +7,23 @@ module.exports = {
     channelId: process.env.verificationChannel,
     roleId: process.env.verificationRole,
     prefix: process.env.prefix,
+
+    // Instagram
     instagramToken: process.env.INSTAGRAM_TOKEN,
     instagramUsername: process.env.INSTAGRAM_USERNAME,
     instagramPassword: process.env.INSTAGRAM_PASSWORD,
     instagramMessageTemplate: process.env.INSTAGRAM_MESSAGE_TEMPLATE,
     instagramChannel: process.env.INSTAGRAM_CHANNEL_ID,
     instagramRoleId: process.env.INSTAGRAM_ROLE_ID,
+
+    // Auto Role
     autoRoleChannel: process.env.autoRoleChannel,
+    autoRoleRole: process.env.autoRoleRole,
+
+    // MongoDB
+    mongoURI: process.env.MONGO_URI,
+
+    // Logs
     Logs: {
         // Event Logs
         Ready: true,
@@ -22,10 +32,10 @@ module.exports = {
         ReactionHandler: true,
         RepetitiveTask: true,
         ShutdownHandler: true,
-        ReactionAdd: false,
+        ReactionAdd: true,
 
         // Core Systems
-        AutoRole: false,
+        AutoRole: true,
         MusicManager: {
             General: true,
             NodeConnection: false,

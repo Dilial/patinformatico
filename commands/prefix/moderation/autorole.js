@@ -6,7 +6,7 @@ module.exports = {
     description: 'Create or manage reaction roles',
     usage: 'create/modify/delete <args>',
     category: 'admin',
-    permissions: ['MANAGE_ROLES'],
+    permissions: ['ManageRoles'],
     run: async (client, message, args) => {
         try {
             if (!args.length) {

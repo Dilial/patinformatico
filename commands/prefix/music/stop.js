@@ -22,6 +22,7 @@ module.exports = {
 
             player.queue.clear();
             player.stop();
+            player.destroy();
             Logger.success(MODULE_NAME, `Music stopped in guild ${message.guild.id}`, 'Playback');
             
             const embed = {

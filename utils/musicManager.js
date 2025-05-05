@@ -84,7 +84,7 @@ class MusicManager {
                             } : null
                         };
 
-                        await this.saveGuildState(player.guild, queueState);
+                        //await this.saveGuildState(player.guild, queueState);
                         Logger.success(MODULE_NAME, `Saved state for guild ${player.guild}`, 'PlayerState');
                         player.destroy();
                     } catch (error) {
@@ -258,6 +258,12 @@ class MusicManager {
 
         // Track events
         this.manager.on("trackStart", (player, track) => {
+            // Save all tracks for repeat functionality
+            if (!player.previousTracks) player.previousTracks = [];
+            
+            // Store current queue for repeat
+            player.previousTracks = [track, ...player.queue.map(t => t)];
+            
             Logger.info(MODULE_NAME, `Started playing: ${track.title}`, 'PlayerState');
             const channel = this.client.channels.cache.get(player.textChannel);
             if (channel) {
@@ -281,18 +287,36 @@ class MusicManager {
             }
         });
 
-        this.manager.on("queueEnd", player => {
+        this.manager.on("queueEnd", async player => {
+            // Log that the queue ended
+            Logger.info(MODULE_NAME, `Queue ended for guild ${player.guild}`, 'QueueUpdate');
+            
+            // Check if queue repeat is enabled
+            if (player.queueRepeat) {
+                // If we have previous tracks in memory, reinstate them
+                if (player.previousTracks && player.previousTracks.length > 0) {
+                    Logger.info(MODULE_NAME, `Queue repeat enabled, restarting queue with ${player.previousTracks.length} tracks`, 'QueueUpdate');
+                    
+                    // Add tracks back to queue
+                    for (const track of player.previousTracks) {
+                        player.queue.add(track);
+                    }
+                    
+                    // Start playing again
+                    await player.play();
+                    return;
+                }
+            }
+
+            // Original queue end logic for when repeat is disabled
             const channel = this.client.channels.cache.get(player.textChannel);
             if (channel) {
                 const embed = {
                     description: "📭 Queue ended! I'll leave in 2 minutes if no songs are added.",
-                    color: 0xFFA500 // Orange color
+                    color: 0xFFA500
                 };
                 channel.send({ embeds: [embed] }).catch(console.error);
             }
-
-            // Disable loop when queue ends
-            player.setQueueRepeat(false);
 
             // Set a timeout for 2 minutes
             setTimeout(() => {

@@ -1,25 +1,4 @@
 {
-  "guildId": "1339255189290352772",
-  "voiceChannel": "1339257987201630322",
-  "textChannel": "1339276364506730526",
-  "queue": [
-    {
-      "title": "Bling-Bang-Bang-Born (Official Music Video)",
-      "uri": "https://www.youtube.com/watch?v=5NzfqW_Yt6Y",
-      "author": "TheAnimeMen",
-      "duration": 167000
-    }
-  ],
-  "position": 208520,
-  "volume": 25,
-  "playing": true,
-  "paused": false,
-  "currentTrack": {
-    "title": "Poor Mans Poison - Hell's Comin' With Me (Lyrics)",
-    "uri": "https://www.youtube.com/watch?v=9oDxynh7rG0",
-    "author": "LyricsZone",
-    "duration": 214000
-  },
   "rulesChannel": "1340414520375644290",
   "rulesMessageId": "1340734785441632289",
   "verificationRequired": true,
